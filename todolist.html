@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>记事本</title>
+    <link rel="stylesheet" href="http://m.sui.taobao.org/dist/css/sm.css">
+    <link rel="stylesheet" href="./todolist.css">
+    <script src="../base/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- head start -->
+        <header class="bar bar-nav">
+            <a class="icon icon-left pull-left"></a>
+            <a class="icon icon icon-edit pull-right" @click="contentType == 'show' ? contentType = 'edit' : contentType = 'show'"></a>
+            <h1 class="title">记事本</h1>
+        </header>
+        <!-- head end -->
+
+        <!-- content-show start -->
+        <div class="content" v-if="contentType == 'show'">
+            <!-- 卡片内容 -->
+            <div class="card" v-for="(todo,i) in getTodos" :key="i">
+                <div class="card-content">
+                     <div class="card-content-inner">{{todo.content}}</div>
+                </div>
+                <!-- 按钮 -->
+                 <div class="btn">
+                     <!-- 选择 -->
+                    <p>
+                        <button class="button button-success icon icon-check" 
+                        @click="todo.isChecked = !todo.isChecked" 
+                        :class="{'button-fill':todo.isChecked}"></button>
+                    </p>
+                    <!-- 删除 -->
+                    <p>
+                        <button class="button button-warning icon icon-remove" 
+                        @click="removeTodo(todo.id)" ></button>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- content-show end -->
+
+        <!-- content-edit start -->
+        <div class="content" v-if="contentType == 'edit'">
+            <!-- 编辑内容 -->
+            <textarea class="text" v-model.lazy="showedit"></textarea>
+            <!-- 按钮 -->
+            <div class="btn">
+                <p><button class="button button-success icon icon-check" @click="addTodos"></button></p>
+                <p><button class="button button-warning icon icon-remove"></button></p>
+            </div>
+        </div>
+        <!-- content-edit end -->
+
+        <!-- foot start -->
+        <nav class="bar bar-tab">
+            <a class="tab-item external" href="#" 
+            v-for="btn in btns"
+            :class="{active:btn.isChecked}"
+            @click="checkSetting(btn.type)">
+                <span class="icon" 
+                :class="'icon-'+btn.className"
+                ></span>
+                <span class="tab-label" v-cloak>{{btn.content}}</span>
+                <span class="badge">{{getLength(btn.type)}}</span>
+            </a>
+        </nav>
+        <!-- foot end -->
+    </div>
+</body>
+<script src="./todolist.js"></script>
+</html>
